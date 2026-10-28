@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Triagem inteligente de solicitações empresariais">
+    <title>AIOps | Triagem inteligente</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header><p class="eyebrow">AIOps</p><h1>Triagem inteligente de solicitações</h1><p class="intro">Envie a demanda para classificação. A IA apoia a triagem; decisões críticas sempre passam por uma pessoa.</p></header>
+      <section id="intake-card" class="card" aria-labelledby="intake-title">
+        <h2 id="intake-title">Nova solicitação</h2>
+        <form id="intake-form" novalidate>
+          <label>Protocolo externo<input name="external_id" required pattern="[A-Za-z0-9_-]{4,80}" maxlength="80" placeholder="REQ-2026-001"></label>
+          <label>Nome<input name="requester_name" required minlength="2" maxlength="100" autocomplete="name"></label>
+          <label>E-mail<input name="requester_email" required type="email" maxlength="254" autocomplete="email"></label>
+          <label>Descreva a solicitação<textarea name="description" required minlength="15" maxlength="3000" rows="6" placeholder="Explique o pedido, contexto e prazo."></textarea></label>
+          <button type="submit">Enviar para triagem</button>
+        </form>
+        <output id="intake-result" class="result" aria-live="polite"></output>
+      </section>
+      <section id="review-card" class="card hidden" aria-labelledby="review-title">
+        <h2 id="review-title">Decisão humana</h2><p>Confirme a decisão somente depois de consultar a solicitação no sistema. Este link é de uso único.</p>
+        <form id="review-form" novalidate>
+          <input id="review-token" name="token" type="hidden">
+          <label>Nome do revisor<input name="reviewer" required minlength="2" maxlength="100" autocomplete="name"></label>
+          <div class="actions"><button name="decision" value="approve" type="submit">Aprovar encaminhamento</button><button class="secondary" name="decision" value="reject" type="submit">Rejeitar</button></div>
+        </form>
+        <output id="review-result" class="result" aria-live="polite"></output>
+      </section>
+    </main>
+    <script src="config.js"></script><script src="app.js"></script>
+  </body>
+</html>
