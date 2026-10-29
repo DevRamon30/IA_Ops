@@ -1,36 +1,22 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Triagem inteligente de solicitações empresariais">
-    <title>AIOps | Triagem inteligente</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Plataforma AIOps para triagem inteligente de solicitações empresariais.">
+    <title>AIOps | Triagem inteligente</title><link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div><div class="ambient ambient-two" aria-hidden="true"></div>
     <main class="shell">
-      <header><p class="eyebrow">AIOps</p><h1>Triagem inteligente de solicitações</h1><p class="intro">Envie a demanda para classificação. A IA apoia a triagem; decisões críticas sempre passam por uma pessoa.</p></header>
-      <section id="intake-card" class="card" aria-labelledby="intake-title">
-        <h2 id="intake-title">Nova solicitação</h2>
-        <form id="intake-form" novalidate>
-          <label>Protocolo externo<input name="external_id" required pattern="[A-Za-z0-9_-]{4,80}" maxlength="80" placeholder="REQ-2026-001"></label>
-          <label>Nome<input name="requester_name" required minlength="2" maxlength="100" autocomplete="name"></label>
-          <label>E-mail<input name="requester_email" required type="email" maxlength="254" autocomplete="email"></label>
-          <label>Descreva a solicitação<textarea name="description" required minlength="15" maxlength="3000" rows="6" placeholder="Explique o pedido, contexto e prazo."></textarea></label>
-          <button type="submit">Enviar para triagem</button>
-        </form>
+      <header class="topbar"><a class="brand" href="./" aria-label="AIOps — página inicial"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M3.8 12h16.4M12 3.5c2.2 2.3 3.3 5.1 3.3 8.5S14.2 18.2 12 20.5C9.8 18.2 8.7 15.4 8.7 12S9.8 5.8 12 3.5Z"/></svg></span><span>AIOPS</span></a><span class="secure-badge"><span></span>Fluxo monitorado</span></header>
+      <section class="hero" aria-labelledby="page-title"><div class="hero-copy"><p class="eyebrow">Central de solicitações</p><h1 id="page-title">Triagem inteligente,<br><em>decisão humana.</em></h1><p class="intro">Registre uma demanda e acompanhe o encaminhamento com rapidez, transparência e segurança.</p><button id="start-intake" class="hero-action" type="button">Nova solicitação <span aria-hidden="true">→</span></button></div><ol class="steps" aria-label="Etapas do processo"><li class="active"><span>1</span><div><strong>Enviar</strong><small>Solicitação</small></div></li><li><span>2</span><div><strong>Triar</strong><small>Análise com IA</small></div></li><li><span>3</span><div><strong>Decidir</strong><small>Validação humana</small></div></li></ol></section>
+      <section id="intake-card" class="card intake-card hidden" aria-labelledby="intake-title">
+        <a class="back-link" href="./"><span aria-hidden="true">←</span> Voltar ao início</a>
+        <div class="card-heading"><div><p class="section-kicker">Etapa 01</p><h2 id="intake-title">Nova solicitação</h2></div><p class="required-note"><span aria-hidden="true">*</span> Campos obrigatórios</p></div><p class="card-intro">Inclua as informações abaixo para iniciar a triagem.</p>
+        <form id="intake-form" novalidate><div class="form-grid"><label>Protocolo externo<input name="external_id" required pattern="[A-Za-z0-9_-]{4,80}" maxlength="80" placeholder="Ex.: REQ-2026-001"></label><label>Nome completo<input name="requester_name" required minlength="2" maxlength="100" autocomplete="name" placeholder="Como podemos chamar você?"></label><label class="full">E-mail corporativo<input name="requester_email" required type="email" maxlength="254" autocomplete="email" placeholder="nome@empresa.com"></label><label class="full">Descreva a solicitação<textarea name="description" required minlength="15" maxlength="3000" rows="6" placeholder="Explique o pedido, o contexto e, se houver, o prazo necessário."></textarea><small>Quanto mais contexto, melhor será o encaminhamento.</small></label></div><div class="form-footer"><p><span class="shield" aria-hidden="true">✓</span> Seus dados são processados em um fluxo seguro.</p><button type="submit"><span>Enviar para triagem</span><span aria-hidden="true">→</span></button></div></form>
         <output id="intake-result" class="result" aria-live="polite"></output>
       </section>
-      <section id="review-card" class="card hidden" aria-labelledby="review-title">
-        <h2 id="review-title">Decisão humana</h2><p>Confirme a decisão somente depois de consultar a solicitação no sistema. Este link é de uso único.</p>
-        <form id="review-form" novalidate>
-          <input id="review-token" name="token" type="hidden">
-          <label>Nome do revisor<input name="reviewer" required minlength="2" maxlength="100" autocomplete="name"></label>
-          <div class="actions"><button name="decision" value="approve" type="submit">Aprovar encaminhamento</button><button class="secondary" name="decision" value="reject" type="submit">Rejeitar</button></div>
-        </form>
-        <output id="review-result" class="result" aria-live="polite"></output>
-      </section>
-    </main>
-    <script src="config.js"></script><script src="app.js"></script>
+      <footer><span class="footer-mark" aria-hidden="true">◉</span> AIOPS <span>•</span> Triagem assistida por IA com validação humana</footer>
+    </main><script src="config.js"></script><script src="app.js"></script>
   </body>
 </html>

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Decisão humana da plataforma AIOps."><title>AIOps | Decisão humana</title><link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div><div class="ambient ambient-two" aria-hidden="true"></div>
+    <main class="shell">
+      <header class="topbar"><a class="brand" href="./" aria-label="AIOps — página inicial"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M3.8 12h16.4M12 3.5c2.2 2.3 3.3 5.1 3.3 8.5S14.2 18.2 12 20.5C9.8 18.2 8.7 15.4 8.7 12S9.8 5.8 12 3.5Z"/></svg></span><span>AIOPS</span></a><span class="secure-badge"><span></span>Fluxo monitorado</span></header>
+      <section class="card review-card" aria-labelledby="review-title"><a class="back-link" href="./"><span aria-hidden="true">←</span> Voltar para página inicial</a><div class="review-layout"><div class="review-copy"><p class="section-kicker">Etapa 03</p><h1 id="review-title">Decisão humana</h1><p>Confira os detalhes da solicitação antes de registrar a decisão. Esta ação é auditável e o link só pode ser usado uma vez.</p><div class="review-hint"><span aria-hidden="true">i</span><p>Após a decisão, o status da solicitação será atualizado automaticamente.</p></div></div><section class="request-summary" aria-labelledby="request-summary-title"><div class="summary-heading"><p class="section-kicker">Dados recebidos</p><span class="summary-status">Pendente</span></div><h2 id="request-summary-title">Resumo da solicitação</h2><dl id="request-details"><div><dt>Protocolo</dt><dd>Carregando…</dd></div></dl></section></div>
+        <form id="review-form" class="review-form" novalidate><input id="review-token" name="token" type="hidden"><label>Nome do revisor<input name="reviewer" required minlength="2" maxlength="100" autocomplete="name" placeholder="Seu nome completo"></label><div class="decision-actions"><button class="approve" name="decision" value="approve" type="submit"><span aria-hidden="true">✓</span> Aprovar encaminhamento</button><button class="reject" name="decision" value="reject" type="submit"><span aria-hidden="true">×</span> Rejeitar solicitação</button></div></form><output id="review-result" class="result" aria-live="polite"></output>
+      </section><footer><span class="footer-mark" aria-hidden="true">◉</span> AIOPS <span>•</span> Triagem assistida por IA com validação humana</footer>
+    </main><script src="config.js"></script><script src="review.js"></script>
+  </body>
+</html>

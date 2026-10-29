@@ -1,40 +1,12 @@
 (() => {
   const config = window.AIOPS_CONFIG || {};
+  const intakeCard = document.querySelector('#intake-card');
   const intakeForm = document.querySelector('#intake-form');
-  const reviewForm = document.querySelector('#review-form');
   const show = (output, message, kind = '') => { output.textContent = message; output.className = `result ${kind}`; };
-  const showReviewLink = (output, reviewToken) => {
-    if (!reviewToken) return;
-    const link = new URL(window.location.href);
-    link.search = '';
-    link.searchParams.set('token', reviewToken);
-    const note = document.createElement('p');
-    note.textContent = 'Demonstração: encaminhe este link ao revisor humano: ';
-    const anchor = document.createElement('a');
-    anchor.href = link.toString();
-    anchor.textContent = 'Abrir revisão';
-    note.append(anchor);
-    output.append(note);
-  };
-  async function post(url, data) {
-    if (!url || url.includes('SEU_WEBHOOK')) throw new Error('Configure as URLs dos webhooks em site/config.js antes de publicar.');
-    const response = await fetch(url, { method:'POST', body:new URLSearchParams(data) });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload.message || payload.detail || payload.error || 'Não foi possível concluir a solicitação.');
-    return payload;
-  }
-  intakeForm.addEventListener('submit', async (event) => {
-    event.preventDefault(); if (!intakeForm.reportValidity()) return;
-    const output = document.querySelector('#intake-result'); const button = intakeForm.querySelector('button'); button.disabled = true; show(output, 'Enviando...');
-    try { const data = Object.fromEntries(new FormData(intakeForm)); const result = await post(config.intakeWebhookUrl, data); const duplicate = result.duplicate ? ' Solicitação já registrada; não foi reprocessada.' : ''; show(output, `Protocolo ${result.external_id || data.external_id}: ${result.status || 'recebido'}.${duplicate}`, 'success'); showReviewLink(output, result.review_token); if (!result.duplicate) intakeForm.reset(); }
-    catch (error) { show(output, error.message, 'error'); } finally { button.disabled = false; }
-  });
-  const token = new URLSearchParams(window.location.search).get('token');
-  if (token) { document.querySelector('#review-card').classList.remove('hidden'); document.querySelector('#review-token').value = token; document.querySelector('#intake-card').classList.add('hidden'); }
-  reviewForm.addEventListener('submit', async (event) => {
-    event.preventDefault(); if (!reviewForm.reportValidity()) return;
-    const output = document.querySelector('#review-result'); const clicked = event.submitter; const buttons = reviewForm.querySelectorAll('button'); buttons.forEach((button) => { button.disabled = true; }); show(output, 'Registrando decisão...');
-    try { const data = Object.fromEntries(new FormData(reviewForm)); data.decision = clicked.value; const result = await post(config.decisionWebhookUrl, data); show(output, result.message || `Decisão registrada: ${result.status || 'sucesso'}.`, 'success'); reviewForm.reset(); }
-    catch (error) { show(output, error.message, 'error'); } finally { buttons.forEach((button) => { button.disabled = false; }); }
-  });
+  const setLoading = (button, loading) => { button.disabled = loading; if (loading) { button.dataset.label = button.innerHTML; button.innerHTML = '<span aria-hidden="true">◌</span> Processando...'; } else if (button.dataset.label) button.innerHTML = button.dataset.label; };
+  const start = () => { intakeCard.classList.remove('hidden'); intakeCard.scrollIntoView({ behavior:'smooth', block:'start' }); setTimeout(() => intakeForm.elements.external_id.focus(), 350); };
+  document.querySelector('#start-intake').addEventListener('click', start);
+  async function post(url, data) { if (!url || url.includes('SEU_WEBHOOK')) throw new Error('Não foi possível localizar a integração. Tente novamente em alguns instantes.'); const response = await fetch(url, { method:'POST', body:new URLSearchParams(data) }); const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.message || payload.detail || payload.error || 'Não foi possível concluir a solicitação.'); return payload; }
+  const showReviewCta = (output, reviewToken, data) => { if (!reviewToken) return; sessionStorage.setItem(`aiops-review-${reviewToken}`, JSON.stringify(data)); const wrapper = document.createElement('div'); wrapper.className = 'review-cta'; const text = document.createElement('p'); text.textContent = 'A solicitação foi encaminhada para a próxima etapa. Para esta demonstração, acesse a decisão humana:'; const link = document.createElement('a'); link.className = 'review-link'; link.href = `review.html?token=${encodeURIComponent(reviewToken)}`; link.textContent = 'Seguir para decisão humana'; wrapper.append(text, link); output.append(wrapper); };
+  intakeForm.addEventListener('submit', async (event) => { event.preventDefault(); if (!intakeForm.reportValidity()) return; const output = document.querySelector('#intake-result'); const button = intakeForm.querySelector('button[type="submit"]'); const data = Object.fromEntries(new FormData(intakeForm)); setLoading(button, true); show(output, 'Estamos encaminhando sua solicitação para análise.'); try { const result = await post(config.intakeWebhookUrl, data); const duplicate = result.duplicate ? ' Esta solicitação já estava registrada e não foi reprocessada.' : ''; show(output, `Solicitação ${result.external_id || data.external_id} recebida com sucesso.${duplicate}`, 'success'); showReviewCta(output, result.review_token, data); if (!result.duplicate) intakeForm.reset(); } catch (error) { show(output, error.message, 'error'); } finally { setLoading(button, false); } });
 })();
