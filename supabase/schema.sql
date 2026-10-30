@@ -123,8 +123,41 @@ begin
   ) select upd.id,upd.external_id,upd.requester_email,upd.summary,upd.status from upd;
 end $$;
 
+-- Consulta usada apenas pelo servidor do site para exibir os dados ao revisor.
+-- O token bruto nunca é armazenado: a comparação é feita pelo hash SHA-256.
+create or replace function public.get_review_request(p_raw_token text)
+returns table(
+  external_id text,
+  requester_name text,
+  requester_email text,
+  description text,
+  category text,
+  priority text,
+  confidence numeric,
+  summary text,
+  status text
+)
+language sql security definer set search_path = public as $$
+  select
+    d.external_id,
+    d.requester_name,
+    d.requester_email,
+    d.description,
+    d.category,
+    d.priority,
+    d.confidence,
+    d.summary,
+    d.status
+  from public.demands d
+  where d.approval_token_hash = encode(extensions.digest(p_raw_token, 'sha256'), 'hex')
+    and d.status = 'pending_approval'
+  limit 1;
+$$;
+
 revoke all on public.demands, public.audit_events, public.automation_errors from anon, authenticated;
 grant select, insert, update on public.demands, public.audit_events, public.automation_errors to service_role;
 grant usage, select on all sequences in schema public to service_role;
 revoke all on function public.register_intake(text,text,text,text), public.save_classification(bigint,text,text,numeric,text,boolean,boolean), public.create_review_token(bigint,text), public.consume_review_token(text,text,text) from public;
 grant execute on function public.register_intake(text,text,text,text), public.save_classification(bigint,text,text,numeric,text,boolean,boolean), public.create_review_token(bigint,text), public.consume_review_token(text,text,text) to service_role;
+revoke all on function public.get_review_request(text) from public;
+grant execute on function public.get_review_request(text) to service_role;

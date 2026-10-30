@@ -52,9 +52,11 @@ Execute [supabase/schema.sql](supabase/schema.sql) no SQL Editor de um projeto S
 O diretório `dist/` contém os arquivos estáticos e `api/` contém dois proxies de servidor. No painel do Vercel, importe o repositório e registre estas variáveis de ambiente para Production, Preview e Development:
 
 - `MAKE_INTAKE_WEBHOOK_URL`;
-- `MAKE_DECISION_WEBHOOK_URL`.
+- `MAKE_DECISION_WEBHOOK_URL`;
+- `SUPABASE_URL`;
+- `SUPABASE_SERVICE_ROLE_KEY`.
 
-Os valores são as URLs dos respectivos webhooks do Make e não devem ser adicionados ao GitHub. Após salvar variáveis, faça um novo deploy.
+Os valores são as URLs dos respectivos webhooks do Make e as credenciais de servidor do Supabase; não devem ser adicionados ao GitHub. As duas variáveis do Supabase são usadas somente pela rota `/api/review-details` para mostrar os dados de uma solicitação pendente ao revisor, mediante o token de uso único. Após salvar variáveis, faça um novo deploy.
 
 ## Segurança e limites
 
